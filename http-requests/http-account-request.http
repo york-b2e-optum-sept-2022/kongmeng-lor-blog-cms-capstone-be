@@ -1,4 +1,14 @@
-GET http://localhost:8008/api/account/getAll
+POST http://localhost:8008/api/account/sendMessage
+Content-Type: application/json
+
+{
+  "current_Id": 1,
+  "message": "HELLO WORLD",
+  "sender_Id": 2
+}
+
+###
+GET http://localhost:8008/api/account/login?email=1142&password=12345
 Accept: application/json
 
 ###
@@ -6,7 +16,7 @@ POST http://localhost:8008/api/account
 Content-Type: application/json
 
 {
-  "email": "kongmenglor122@gmail.com",
+  "email": "11422",
   "password": "12345",
   "confirm_Password": "12345",
   "name":"Kongmeng"

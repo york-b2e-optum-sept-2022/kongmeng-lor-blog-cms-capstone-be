@@ -1,7 +1,9 @@
 package net.yorksolutions.kongmenglorblogcmscapstonebe.controllers;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.CreateAccountDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.LoginDTO;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.SendMessageDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.MessageEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.services.AccountService;
 import org.apache.juli.logging.Log;
 import org.springframework.web.bind.annotation.*;
@@ -25,7 +27,11 @@ public class AccountController {
         return this.accountService.getAll();
     }
     @GetMapping("/login")
-    public Optional<AccountEntity> login(@RequestParam LoginDTO dto) {
-        return this.accountService.login(dto);
+    public Optional<AccountEntity> login(@RequestParam String email, @RequestParam String password) {
+        return this.accountService.login(email,password);
+    }
+    @PostMapping("/sendMessage")
+    public MessageEntity createMessage(@RequestBody SendMessageDTO dto) {
+        return this.accountService.createMessage(dto);
     }
 }

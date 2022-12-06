@@ -2,10 +2,8 @@ package net.yorksolutions.kongmenglorblogcmscapstonebe.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class AccountEntity {
@@ -19,6 +17,27 @@ public class AccountEntity {
     private String password;
     @JsonProperty
     private String name;
+    private Boolean sent = false;
+
+    public Boolean getSent() {
+        return sent;
+    }
+
+    public void setSent(Boolean sent) {
+        this.sent = sent;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
+    private List<MessageEntity> messageEntity;
+
+    public List<MessageEntity> getMessageEntity() {
+        return messageEntity;
+    }
+
+    public void setMessageEntity(List<MessageEntity> messageEntity) {
+        this.messageEntity = messageEntity;
+    }
 
     public AccountEntity() {
     }
@@ -26,6 +45,8 @@ public class AccountEntity {
         this.email = email;
         this.password = password;
         this.name = name;
+        this.messageEntity = null;
+        this.sent = false;
     }
 
     public void setEmail(String email) {
