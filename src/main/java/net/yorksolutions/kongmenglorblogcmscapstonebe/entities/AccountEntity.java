@@ -3,6 +3,7 @@ package net.yorksolutions.kongmenglorblogcmscapstonebe.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.util.HashMap;
 import java.util.List;
 
 @Entity
@@ -17,37 +18,28 @@ public class AccountEntity {
     private String password;
     @JsonProperty
     private String name;
-    private Boolean sent = false;
 
-    public Boolean getSent() {
-        return sent;
-    }
 
-    public void setSent(Boolean sent) {
-        this.sent = sent;
-    }
-
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinColumn
-    private List<MessageEntity> messageEntity;
+    private List<Message> messages;
 
-    public List<MessageEntity> getMessageEntity() {
-        return messageEntity;
-    }
-
-    public void setMessageEntity(List<MessageEntity> messageEntity) {
-        this.messageEntity = messageEntity;
-    }
-
-    public AccountEntity() {
-    }
-    public AccountEntity(String email, String password, String name) {
+    public AccountEntity(String email, String password, String name, List<Message> messages) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.messageEntity = null;
-        this.sent = false;
+        this.messages = messages;
     }
+
+    public List<Message> getMessages() {
+        return messages;
+    }
+
+    public void setMessages(List<Message> messages) {
+        this.messages = messages;
+    }
+
+    public AccountEntity() {}
 
     public void setEmail(String email) {
         this.email = email;
