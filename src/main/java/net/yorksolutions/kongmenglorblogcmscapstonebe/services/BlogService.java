@@ -72,10 +72,16 @@ public class BlogService {
         BlogEntity blogEntity = checkBlogId(dto.Id);
         List<HashMap> hashMaps = blogEntity.getComments();
         if (hashMaps.get(dto.index).containsKey(dto.email)) {
-
-
-            return null;
+            List<HashMap> newHashMaps = new ArrayList<>();
+            for (int i = 0; i < hashMaps.size(); i++) {
+                if (hashMaps.get(i) != hashMaps.get(dto.index)) {
+                    newHashMaps.add(hashMaps.get(i));
+                }
+            }
+            blogEntity.setComments(newHashMaps);
+            this.blogRepositories.save(blogEntity);
+            return blogEntity;
         }
-        return null;
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
     }
 }
