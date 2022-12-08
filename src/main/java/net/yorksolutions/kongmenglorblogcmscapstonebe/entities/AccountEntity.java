@@ -1,9 +1,10 @@
 package net.yorksolutions.kongmenglorblogcmscapstonebe.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,27 +20,42 @@ public class AccountEntity {
     @JsonProperty
     private String name;
 
+    @JsonIgnore
+    private Boolean messageCreated;
 
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinColumn
-    private List<Message> messages;
+    private List<MessageEntity> messageEntities = new ArrayList<MessageEntity>();
 
-    public AccountEntity(String email, String password, String name, List<Message> messages) {
+
+    public AccountEntity() {}
+
+    public AccountEntity(String email, String password, String name, List<MessageEntity> messageEntities) {
         this.email = email;
         this.password = password;
         this.name = name;
-        this.messages = messages;
+        this.messageEntities = messageEntities;
+        this.messageCreated = false;
     }
 
-    public List<Message> getMessages() {
-        return messages;
+    public List<MessageEntity> getMessageEntities() {
+        return messageEntities;
+    }
+    public void addMessage(MessageEntity message) {
+        this.messageEntities.add(message);
     }
 
-    public void setMessages(List<Message> messages) {
-        this.messages = messages;
+    public Boolean getMessageCreated() {
+        return messageCreated;
     }
 
-    public AccountEntity() {}
+    public void setMessageCreated(Boolean messageCreated) {
+        this.messageCreated = messageCreated;
+    }
+
+    public void setMessageEntities(List<MessageEntity> messageEntities) {
+        this.messageEntities = messageEntities;
+        this.messageCreated = true;
+    }
 
     public void setEmail(String email) {
         this.email = email;
