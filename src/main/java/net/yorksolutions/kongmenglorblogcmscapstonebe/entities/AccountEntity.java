@@ -26,14 +26,18 @@ public class AccountEntity {
     @ManyToMany(cascade = CascadeType.ALL)
     private List<MessageEntity> messageEntities = new ArrayList<MessageEntity>();
 
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
+    private List<BlogEntity> blogEntities = new ArrayList<>();
 
     public AccountEntity() {}
 
-    public AccountEntity(String email, String password, String name, List<MessageEntity> messageEntities) {
+    public AccountEntity(String email, String password, String name, List<MessageEntity> messageEntities, List<BlogEntity> blogEntities) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.messageEntities = messageEntities;
+        this.blogEntities = blogEntities;
         this.messageCreated = false;
     }
 

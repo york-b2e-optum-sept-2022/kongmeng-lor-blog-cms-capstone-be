@@ -1,8 +1,10 @@
 package net.yorksolutions.kongmenglorblogcmscapstonebe.services;
 
+import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.CreateAccountDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.SendMessageDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.MessageEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.AccountRepositories;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.MessageRepositories;
@@ -23,13 +25,13 @@ public class AccountService {
     }
 
     public AccountEntity create(CreateAccountDTO dto) {
-        if (dto.email == "") {
+        if (dto.email.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        if (dto.password == "") {
+        if (dto.password.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
-        if (dto.name == "") {
+        if (dto.name.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
         if (!dto.password.equals(dto.confirm_Password)) {
@@ -37,9 +39,9 @@ public class AccountService {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
         }
 
-        Optional acc = this.accountRepositories.findByEmail(dto.email);
+        Optional<AccountEntity> acc = this.accountRepositories.findByEmail(dto.email);
         if (acc.isEmpty()) {
-            return this.accountRepositories.save(new AccountEntity(dto.email,dto.password,dto.name,new ArrayList<MessageEntity>()));
+            return this.accountRepositories.save(new AccountEntity(dto.email,dto.password,dto.name,new ArrayList<>(), new ArrayList<>()));
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
@@ -48,14 +50,14 @@ public class AccountService {
         return this.accountRepositories.findAll();
     }
     public Optional<AccountEntity> login(String email, String password) {
-        if (email == "") {
+        if (email.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        if (password == "") {
+        if (password.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
-        Optional account = this.accountRepositories.findByEmailAndPassword(email,password);
-        if (account!=null) {
+        Optional<AccountEntity> account = this.accountRepositories.findByEmailAndPassword(email,password);
+        if (account.isPresent()) {
             return account;
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
@@ -79,7 +81,7 @@ public class AccountService {
         List<HashMap> history = new ArrayList<>();
         HashMap<String,String> hashMap = new HashMap<>();
 
-        if (current_Account.getMessageCreated() == false && second_Account.getMessageCreated() == false) {
+        if (!current_Account.getMessageCreated()&& !second_Account.getMessageCreated()) {
             hashMap.put(current_Account.getEmail(), dto.message);
             history.add(hashMap);
             MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), history);
@@ -125,7 +127,6 @@ public class AccountService {
         }
         return replying(current_Account,second_Account,message_Id, dto.message);
     }
-
     public MessageEntity replying(AccountEntity current_Account, AccountEntity second_Account, Long message_Id, String messages) {
         Optional<MessageEntity> message = this.messageRepositories.findById(message_Id);
         if (message.isEmpty()) {
@@ -139,7 +140,6 @@ public class AccountService {
         this.messageRepositories.save(message.get());
         return message.get();
     }
-
     public List<MessageEntity> createMessageHelper1(AccountEntity current_Account, AccountEntity second_Account, SendMessageDTO dto) {
         List<MessageEntity> messageEntityList = new ArrayList<>();
         List<HashMap> history = new ArrayList<>();
@@ -174,6 +174,12 @@ public class AccountService {
     }
 
 
+    public BlogEntity postBlog(BlogDTO dto) {
+        BlogEntity blogEntity = new BlogEntity(dto.title,dto.body,dto.create_Date,dto.update_Date,dto.owner_Email,dto.owner_Id);
 
 
+
+
+        return null;
+    }
 }
