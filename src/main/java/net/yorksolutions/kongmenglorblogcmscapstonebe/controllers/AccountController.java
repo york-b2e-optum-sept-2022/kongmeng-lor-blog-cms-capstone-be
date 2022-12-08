@@ -6,8 +6,10 @@ import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.MessageEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.services.AccountService;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.services.BlogService;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -15,9 +17,13 @@ import java.util.Optional;
 @RequestMapping("/api/account")
 public class AccountController {
     AccountService accountService;
-    public AccountController(AccountService accountService) {
+    BlogService blogService;
+
+    public AccountController(AccountService accountService, BlogService blogService) {
         this.accountService = accountService;
+        this.blogService = blogService;
     }
+
     @PostMapping
     public AccountEntity create(@RequestBody CreateAccountDTO dto) {
         return this.accountService.create(dto);
@@ -38,4 +44,15 @@ public class AccountController {
     public BlogEntity postBlog(@RequestBody BlogDTO dto) {
         return this.accountService.postBlog(dto);
     }
+    @DeleteMapping("/delete/blog")
+    public List<BlogEntity> deleteBlog(@RequestParam Long ownerId, @RequestParam Long blogId) {
+        this.blogService.deleteBlog(blogId);
+        return this.accountService.deleteBlog(ownerId);
+    }
+    @GetMapping("/get/allBlogs")
+    public List<BlogEntity> getBlogs(@RequestParam Long Id) {
+        return this.accountService.getBlogs(Id);
+    }
+
+
 }

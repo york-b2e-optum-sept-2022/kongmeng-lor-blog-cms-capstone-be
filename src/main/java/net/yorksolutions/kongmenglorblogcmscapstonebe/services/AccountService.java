@@ -111,9 +111,7 @@ public class AccountService {
             temp.addAll(messageEntities);
 
             second_Account.setMessageEntities(temp);
-            System.out.println("HELLO YOU!");
             this.accountRepositories.save(second_Account);
-            System.out.println("I good");
             return messageEntities.get(0);
         }
 
@@ -175,11 +173,38 @@ public class AccountService {
 
 
     public BlogEntity postBlog(BlogDTO dto) {
+        Optional<AccountEntity> account = this.accountRepositories.findById(dto.owner_Id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         BlogEntity blogEntity = new BlogEntity(dto.title,dto.body,dto.create_Date,dto.update_Date,dto.owner_Email,dto.owner_Id);
+        List<BlogEntity> blogEntities = new ArrayList<>();
+        if (account.get().getBlogEntities().isEmpty()) {
+            blogEntities.add(blogEntity);
+            account.get().setBlogEntities(blogEntities);
+            this.accountRepositories.save(account.get());
+            return account.get().getBlogEntities().get(0);
+        }
+        blogEntities = account.get().getBlogEntities();
+        blogEntities.add(blogEntity);
+        account.get().setBlogEntities(blogEntities);
+        this.accountRepositories.save(account.get());
+        return account.get().getBlogEntities().get(account.get().getBlogEntities().size()-1);
+    }
+    public List<BlogEntity> deleteBlog(Long Id) {
+        Optional<AccountEntity> account = this.accountRepositories.findById(Id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return account.get().getBlogEntities();
+    }
 
 
-
-
-        return null;
+    public List<BlogEntity> getBlogs(Long Id) {
+        Optional<AccountEntity> account = this.accountRepositories.findById(Id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return account.get().getBlogEntities();
     }
 }

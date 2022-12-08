@@ -8,7 +8,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8008/api/account/login?email=1&password=12345
+GET http://localhost:8008/api/account/login?email=test2&password=12345
 Accept: application/json
 
 ###
@@ -16,7 +16,7 @@ POST http://localhost:8008/api/account
 Content-Type: application/json
 
 {
-  "email": "4",
+  "email": "test1",
   "password": "12345",
   "confirm_Password": "12345",
   "name":"Kongmeng"

@@ -2,10 +2,10 @@ package net.yorksolutions.kongmenglorblogcmscapstonebe.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 @Entity
 public class BlogEntity {
@@ -25,6 +25,10 @@ public class BlogEntity {
     @JsonProperty
     private Long owner_Id;
 
+    @JsonProperty
+    @ElementCollection
+    List<HashMap> comments = new ArrayList<>();
+
     public BlogEntity() {}
 
     public BlogEntity(String title, String body, String create_Date, String update_Date, String owner_Email, Long owner_Id) {
@@ -34,6 +38,14 @@ public class BlogEntity {
         this.update_Date = update_Date;
         this.owner_Email = owner_Email;
         this.owner_Id = owner_Id;
+    }
+
+    public List<HashMap> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<HashMap> comments) {
+        this.comments = comments;
     }
 
     public Long getId() {

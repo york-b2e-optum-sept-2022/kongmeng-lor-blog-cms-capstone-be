@@ -1,0 +1,58 @@
+DELETE http://localhost:8008/api/blog/delete/comment
+Content-Type: application/json
+
+{
+  "Id": 2,
+  "index": 1,
+  "email": "1"
+}
+
+###
+
+POST http://localhost:8008/api/blog/add/comment
+Content-Type: application/json
+
+{
+  "Id": 2,
+  "user_Id": 1,
+  "comments": "Hello"
+}
+
+###
+
+GET http://localhost:8008/api/account/get/allBlogs?Id=1
+Accept: application/json
+
+###
+
+
+PUT http://localhost:8008/api/blog/edit
+Content-Type: application/json
+
+{
+  "Id": 2,
+  "title": "HELLO YOU!",
+  "body": "Loving is hard.",
+  "update_Date": "12-09-2022"
+}
+
+###
+
+DELETE http://localhost:8008/api/account/delete/blog?ownerId=1&blogId=3
+Accept: application/json
+
+###
+
+POST http://localhost:8008/api/account/post/blog
+Content-Type: application/json
+
+{
+  "title": "He22!",
+  "body": "Waking up everyday, it's great.",
+  "create_Date": "12-18-2022",
+  "update_Date": "12-18-2022",
+  "owner_Email": "test1",
+  "owner_Id": 1
+}
+
+###

@@ -41,6 +41,14 @@ public class AccountEntity {
         this.messageCreated = false;
     }
 
+    public List<BlogEntity> getBlogEntities() {
+        return blogEntities;
+    }
+
+    public void setBlogEntities(List<BlogEntity> blogEntities) {
+        this.blogEntities = blogEntities;
+    }
+
     public List<MessageEntity> getMessageEntities() {
         return messageEntities;
     }
