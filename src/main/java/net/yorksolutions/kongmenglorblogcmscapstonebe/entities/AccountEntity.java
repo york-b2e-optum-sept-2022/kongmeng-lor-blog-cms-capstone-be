@@ -15,7 +15,7 @@ public class AccountEntity {
 
     @JsonProperty
     private String email;
-    @JsonProperty
+    @JsonIgnore
     private String password;
     @JsonProperty
     private String name;

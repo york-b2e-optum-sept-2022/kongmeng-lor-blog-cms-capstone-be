@@ -2,13 +2,13 @@ POST http://localhost:8008/api/account/sendMessage
 Content-Type: application/json
 
 {
-  "current_Id": 3,
-  "message": "Hello Kongmeng",
+  "current_Id": 2,
+  "message": "Hello Kong",
   "sender_Id":1
 }
 
 ###
-GET http://localhost:8008/api/account/login?email=test2&password=12345
+GET http://localhost:8008/api/account/login?email=test1&password=test
 Accept: application/json
 
 ###
