@@ -4,7 +4,9 @@ import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.CreateAccountDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.SendMessageDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
+//import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.HistoryEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.MessageEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.AccountRepositories;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.MessageRepositories;
@@ -41,7 +43,7 @@ public class AccountService {
 
         Optional<AccountEntity> acc = this.accountRepositories.findByEmail(dto.email);
         if (acc.isEmpty()) {
-            return this.accountRepositories.save(new AccountEntity(dto.email,dto.password,dto.name,new ArrayList<>(), new ArrayList<>()));
+            return this.accountRepositories.save(new AccountEntity(dto.email,dto.password,dto.name,new ArrayList<>()));
         }
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
 
@@ -62,11 +64,6 @@ public class AccountService {
         }
         throw new ResponseStatusException(HttpStatus.NOT_FOUND);
     }
-//    SendMessageDTO contains
-//    ------------------------
-//    public Long current_Id;
-//    public String message;
-//    public Long sender_Id;
     public MessageEntity createMessage(SendMessageDTO dto) {
         Optional<AccountEntity> account = this.accountRepositories.findById(dto.current_Id);
         Optional<AccountEntity> account2 = this.accountRepositories.findById(dto.sender_Id);
@@ -77,42 +74,32 @@ public class AccountService {
         AccountEntity current_Account = account.get();
         AccountEntity second_Account = account2.get();
 
-        List<MessageEntity> messageEntityList = new ArrayList<>();
-        List<HashMap> history = new ArrayList<>();
-        HashMap<String,String> hashMap = new HashMap<>();
+        List<MessageEntity> messageLists = new ArrayList<>();
+        List<HistoryEntity> historyLists = new ArrayList<>();
 
+        int page = -1;
         if (!current_Account.getMessageCreated()&& !second_Account.getMessageCreated()) {
-            hashMap.put(current_Account.getEmail(), dto.message);
-            history.add(hashMap);
-            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), history);
-            messageEntityList.add(messageEntity);
+            HistoryEntity history = new HistoryEntity(dto.message,current_Account.getEmail());
+            historyLists.add(history);
+            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+            messageLists.add(messageEntity);
 
-            current_Account.setMessageEntities(messageEntityList);
-            second_Account.setMessageEntities(messageEntityList);
+
+            current_Account.setMessageEntities(messageLists);
+            second_Account.setMessageEntities(messageLists);
 
             this.accountRepositories.save(current_Account);
             this.accountRepositories.save(second_Account);
-            return messageEntity;
+
+
+            return current_Account.getMessageEntities().get(0);
         }
-
         if (current_Account.getMessageCreated() && !second_Account.getMessageCreated()) {
-            List<MessageEntity> temp = current_Account.getMessageEntities();
-            List<MessageEntity> messageEntities = this.createMessageHelper1(current_Account,second_Account,dto);
-            temp.addAll(messageEntities);
-            current_Account.setMessageEntities(temp);
-
-            this.accountRepositories.save(current_Account);
-
-            return messageEntities.get(0);
+            page = 1;
+            return this.helper2(current_Account,this.helper(current_Account,second_Account,dto,page));
         }
         if (!current_Account.getMessageCreated() && second_Account.getMessageCreated()) {
-            List<MessageEntity> temp = second_Account.getMessageEntities();
-            List<MessageEntity> messageEntities = this.createMessageHelper2(current_Account,second_Account,dto);
-            temp.addAll(messageEntities);
-
-            second_Account.setMessageEntities(temp);
-            this.accountRepositories.save(second_Account);
-            return messageEntities.get(0);
+            return this.helper2(second_Account,this.helper(current_Account,second_Account,dto,page));
         }
 
         long message_Id = -1;
@@ -123,7 +110,20 @@ public class AccountService {
                 }
             }
         }
+        System.out.println("MessageID: " + message_Id);
+
+        if(message_Id == -1) {
+            List<MessageEntity> temp = current_Account.getMessageEntities();
+            int index = current_Account.getMessageEntities().size();
+            MessageEntity temp2 = this.createMessageHelper3(current_Account,second_Account,dto);
+            temp.add(temp2);
+            current_Account.setMessageEntities(temp);
+            this.accountRepositories.save(second_Account);
+            return current_Account.getMessageEntities().get(index);
+        }
+
         return replying(current_Account,second_Account,message_Id, dto.message);
+
     }
     public MessageEntity replying(AccountEntity current_Account, AccountEntity second_Account, Long message_Id, String messages) {
         Optional<MessageEntity> message = this.messageRepositories.findById(message_Id);
@@ -131,46 +131,62 @@ public class AccountService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         message.get().setCurrent_Message(messages);
-        List<HashMap> temp = message.get().getHistory_Messages();
-        HashMap<String , String > hashMap = new HashMap<>();
-        hashMap.put(current_Account.getEmail(), messages);
-        temp.add(hashMap);
+        message.get().setEmail_From(current_Account.getEmail());
+        message.get().setEmail_To(second_Account.getEmail());
+        List<HistoryEntity> historyEntityList = message.get().getHistoryEntities();
+        HistoryEntity history = new HistoryEntity(messages, current_Account.getEmail());
+        historyEntityList.add(history);
         this.messageRepositories.save(message.get());
         return message.get();
     }
-    public List<MessageEntity> createMessageHelper1(AccountEntity current_Account, AccountEntity second_Account, SendMessageDTO dto) {
+
+    public MessageEntity createMessageHelper3(AccountEntity current_Account, AccountEntity second_Account, SendMessageDTO dto) {
         List<MessageEntity> messageEntityList = new ArrayList<>();
-        List<HashMap> history = new ArrayList<>();
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put(current_Account.getEmail(), dto.message);
-        history.add(hashMap);
+        List<HistoryEntity> historyLists = new ArrayList<>();
+        HistoryEntity history = new HistoryEntity(dto.message, current_Account.getEmail());
+        historyLists.add(history);
 
-        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), history);
-
+        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(),historyLists);
         messageEntityList.add(messageEntity);
-
-        second_Account.setMessageCreated(true);
-        second_Account.setMessageEntities(messageEntityList);
+        List<MessageEntity> temp_Lists = second_Account.getMessageEntities();
+        int index = temp_Lists.size();
+        temp_Lists.addAll(messageEntityList);
+        second_Account.setMessageEntities(temp_Lists);
         this.accountRepositories.save(second_Account);
-        return second_Account.getMessageEntities();
+        System.out.println(second_Account.getMessageEntities().get(index).getId());
+        return second_Account.getMessageEntities().get(index);
     }
-    public List<MessageEntity> createMessageHelper2(AccountEntity current_Account, AccountEntity second_Account, SendMessageDTO dto) {
+
+    public MessageEntity helper2(AccountEntity account, List<MessageEntity> messageEntities) {
+        List<MessageEntity> temp = account.getMessageEntities();
+        List<MessageEntity> messageLists = messageEntities;
+        temp.addAll(messageLists);
+
+        account.setMessageEntities(temp);
+        this.accountRepositories.save(account);
+        return messageEntities.get(0);
+    }
+
+    public List<MessageEntity> helper(AccountEntity current_Account, AccountEntity second_Account, SendMessageDTO dto, int page) {
         List<MessageEntity> messageEntityList = new ArrayList<>();
-        List<HashMap> history = new ArrayList<>();
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put(current_Account.getEmail(), dto.message);
-        history.add(hashMap);
-
-        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), history);
-
-        messageEntityList.add(messageEntity);
-
-        current_Account.setMessageCreated(true);
+        List<HistoryEntity> historyLists = new ArrayList<>();
+        if (page == 1) {
+            HistoryEntity history = new HistoryEntity(dto.message,current_Account.getEmail());
+            historyLists.add(history);
+            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+            messageEntityList.add(messageEntity);
+            second_Account.setMessageEntities(messageEntityList);
+            this.accountRepositories.save(second_Account);
+            return second_Account.getMessageEntities();
+        }
+        HistoryEntity history = new HistoryEntity(dto.message,second_Account.getEmail());
+        historyLists.add(history);
+        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+        messageEntity.setHistoryEntities(historyLists);
         current_Account.setMessageEntities(messageEntityList);
         this.accountRepositories.save(current_Account);
         return current_Account.getMessageEntities();
     }
-
 
     public BlogEntity postBlog(BlogDTO dto) {
         Optional<AccountEntity> account = this.accountRepositories.findById(dto.owner_Id);
@@ -196,9 +212,9 @@ public class AccountService {
         if (account.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
+
         return account.get().getBlogEntities();
     }
-
 
     public List<BlogEntity> getBlogs(Long Id) {
         Optional<AccountEntity> account = this.accountRepositories.findById(Id);

@@ -1,10 +1,14 @@
+POST http://localhost:8008/api/blog/update/views?blogId=2&userId=2
+Accept: application/json
+
+###
 DELETE http://localhost:8008/api/blog/delete/comment
 Content-Type: application/json
 
 {
   "Id": 2,
   "index": 0,
-  "email": "test2"
+  "user_Id": 1
 }
 
 ###
@@ -15,7 +19,7 @@ Content-Type: application/json
 {
   "Id": 2,
   "user_Id": 1,
-  "comments": "Love"
+  "comments": "Not bad!"
 }
 
 ###
@@ -38,7 +42,7 @@ Content-Type: application/json
 
 ###
 
-DELETE http://localhost:8008/api/account/delete/blog?ownerId=1&blogId=3
+DELETE http://localhost:8008/api/account/delete/blog?ownerId=1&blogId=2
 Accept: application/json
 
 ###
@@ -47,7 +51,7 @@ POST http://localhost:8008/api/account/post/blog
 Content-Type: application/json
 
 {
-  "title": "He22!",
+  "title": "Hello world!",
   "body": "Waking up everyday, it's great.",
   "create_Date": "12-18-2022",
   "update_Date": "12-18-2022",

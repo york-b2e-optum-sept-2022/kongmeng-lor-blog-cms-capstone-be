@@ -29,4 +29,8 @@ public class BlogController {
     public BlogEntity deleteComment(@RequestBody BlogDeleteDTO dto) {
         return this.blogService.deleteComment(dto);
     }
+    @PostMapping("/update/views")
+    public void updateViews(@RequestParam Long blogId, @RequestParam Long userId) {
+        this.blogService.updateViews(blogId,userId);
+    }
 }

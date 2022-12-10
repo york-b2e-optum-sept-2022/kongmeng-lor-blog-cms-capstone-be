@@ -2,13 +2,13 @@ POST http://localhost:8008/api/account/sendMessage
 Content-Type: application/json
 
 {
-  "current_Id": 2,
-  "message": "Hello Kong",
-  "sender_Id":1
+  "current_Id": 1,
+  "message": "Good morning! We have the same name! How cool is that?!",
+  "sender_Id":5
 }
 
 ###
-GET http://localhost:8008/api/account/login?email=test1&password=test
+GET http://localhost:8008/api/account/login?email=test3&password=test
 Accept: application/json
 
 ###
@@ -16,10 +16,10 @@ POST http://localhost:8008/api/account
 Content-Type: application/json
 
 {
-  "email": "test2",
-  "password": "12345",
-  "confirm_Password": "12345",
-  "name":"Kongmeng"
+  "email": "test3",
+  "password": "test",
+  "confirm_Password": "test",
+  "name":"Mike"
 }
 
 ###

@@ -15,19 +15,40 @@ public class MessageEntity {
     @JsonProperty
     private String current_Message;
     @JsonProperty
+    private String owner;
+    @JsonProperty
     private String email_From;
     @JsonProperty
     private String email_To;
-    @ElementCollection
-    private List<HashMap> history_Messages = new ArrayList<HashMap>();
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
+    List<HistoryEntity> historyEntities = new ArrayList<>();
+
+    public List<HistoryEntity> getHistoryEntities() {
+        return historyEntities;
+    }
+
+    public void setHistoryEntities(List<HistoryEntity> historyEntities) {
+        this.historyEntities = historyEntities;
+    }
 
     public MessageEntity() {}
 
-    public MessageEntity(String current_Message, String email_From, String email_To, List<HashMap> history_Messages) {
+    public MessageEntity(String current_Message, String email_From, String email_To, List<HistoryEntity> historyEntities) {
         this.current_Message = current_Message;
         this.email_From = email_From;
         this.email_To = email_To;
-        this.history_Messages = history_Messages;
+        this.historyEntities = historyEntities;
+        this.owner = email_To;
+    }
+
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
     }
 
     public Long getId() {
@@ -58,11 +79,11 @@ public class MessageEntity {
         this.email_To = email_To;
     }
 
-    public List<HashMap> getHistory_Messages() {
-        return history_Messages;
-    }
-
-    public void setHistory_Messages(List<HashMap> history_Messages) {
-        this.history_Messages = history_Messages;
-    }
+//    public List<HashMap> getHistory_Messages() {
+//        return history_Messages;
+//    }
+//
+//    public void setHistory_Messages(List<HashMap> history_Messages) {
+//        this.history_Messages = history_Messages;
+//    }
 }

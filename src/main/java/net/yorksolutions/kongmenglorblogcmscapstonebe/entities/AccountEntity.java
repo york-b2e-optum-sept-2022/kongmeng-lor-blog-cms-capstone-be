@@ -30,14 +30,15 @@ public class AccountEntity {
     @JoinColumn
     private List<BlogEntity> blogEntities = new ArrayList<>();
 
+
     public AccountEntity() {}
 
-    public AccountEntity(String email, String password, String name, List<MessageEntity> messageEntities, List<BlogEntity> blogEntities) {
+    public AccountEntity(String email, String password, String name, List<MessageEntity> messageEntities) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.messageEntities = messageEntities;
-        this.blogEntities = blogEntities;
+//        this.blogEntities = blogEntities;
         this.messageCreated = false;
     }
 

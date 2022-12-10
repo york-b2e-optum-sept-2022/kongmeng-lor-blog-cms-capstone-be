@@ -3,6 +3,7 @@ import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.CreateAccountDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.SendMessageDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
+//import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.MessageEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.services.AccountService;
@@ -52,6 +53,10 @@ public class AccountController {
     @GetMapping("/get/allBlogs")
     public List<BlogEntity> getBlogs(@RequestParam Long Id) {
         return this.accountService.getBlogs(Id);
+    }
+    @PostMapping("/update/views")
+    public void updateViews(@RequestParam Long id) {
+
     }
 
 

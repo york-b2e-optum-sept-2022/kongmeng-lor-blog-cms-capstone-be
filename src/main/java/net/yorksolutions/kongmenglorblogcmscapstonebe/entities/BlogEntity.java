@@ -24,10 +24,32 @@ public class BlogEntity {
     private String owner_Email;
     @JsonProperty
     private Long owner_Id;
-
     @JsonProperty
+    private Integer view_Counts;
+
     @ElementCollection
-    List<HashMap> comments = new ArrayList<>();
+    List<Long> view_Accounts = new ArrayList<>();
+
+    public Integer getView_Counts() {
+        return view_Counts;
+    }
+
+    public void setView_Counts(Integer view_Counts) {
+        this.view_Counts = view_Counts;
+    }
+
+    public List<Long> getView_Accounts() {
+        return view_Accounts;
+    }
+
+    public void setView_Accounts(List<Long> view_Accounts) {
+        this.view_Accounts = view_Accounts;
+    }
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn
+    private List<CommentsEntity> commentsLists = new ArrayList<>();
+
 
     public BlogEntity() {}
 
@@ -40,12 +62,12 @@ public class BlogEntity {
         this.owner_Id = owner_Id;
     }
 
-    public List<HashMap> getComments() {
-        return comments;
+    public List<CommentsEntity> getCommentsLists() {
+        return commentsLists;
     }
 
-    public void setComments(List<HashMap> comments) {
-        this.comments = comments;
+    public void setCommentsLists(List<CommentsEntity> commentsLists) {
+        this.commentsLists = commentsLists;
     }
 
     public Long getId() {
