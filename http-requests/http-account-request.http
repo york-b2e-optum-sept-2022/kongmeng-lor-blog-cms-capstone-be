@@ -11,9 +11,9 @@ POST http://localhost:8008/api/account/sendMessage
 Content-Type: application/json
 
 {
-  "current_Id": 1,
+  "current_Id": 3,
   "message": "TIME",
-  "sender_Id":7
+  "sender_Id":2
 }
 
 ###
@@ -25,7 +25,7 @@ POST http://localhost:8008/api/account
 Content-Type: application/json
 
 {
-  "email": "test1",
+  "email": "6kjkjkll83",
   "password": "test",
   "confirm_Password": "test",
   "name":"Kong"

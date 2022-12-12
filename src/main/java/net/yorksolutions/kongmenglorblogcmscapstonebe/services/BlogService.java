@@ -13,7 +13,6 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -123,14 +122,4 @@ public class BlogService {
     public Iterable<BlogEntity> getAllBlogs() {
         return this.blogRepositories.findAll();
     }
-
-//    public List<BlogEntity> getAllBlogsExceptCurrentId(Long id) {
-//        Optional<AccountEntity> account = this.accountRepositories.findById(id);
-//        Iterable<BlogEntity> blogs = this.blogRepositories.findAll();
-//        if (account.isEmpty()) {
-//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
-//        }
-//        blogs.iterator()
-//
-//    }
 }

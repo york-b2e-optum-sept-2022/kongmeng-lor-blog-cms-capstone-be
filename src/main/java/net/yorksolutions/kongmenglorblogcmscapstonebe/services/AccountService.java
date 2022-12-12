@@ -98,6 +98,7 @@ public class AccountService {
             return this.helper2(current_Account,this.helper(current_Account,second_Account,dto,page));
         }
         if (!current_Account.getMessageCreated() && second_Account.getMessageCreated()) {
+
             return this.helper2(second_Account,this.helper(current_Account,second_Account,dto,page));
         }
 
@@ -158,12 +159,19 @@ public class AccountService {
     public MessageEntity helper2(AccountEntity account, List<MessageEntity> messageEntities) {
         List<MessageEntity> temp = account.getMessageEntities();
         List<MessageEntity> messageLists = messageEntities;
+
         temp.addAll(messageLists);
 
         account.setMessageEntities(temp);
         this.accountRepositories.save(account);
-        return messageEntities.get(0);
+        System.out.println(messageEntities.size());
+        return messageLists.get(0);
     }
+
+
+
+
+
 
     public List<MessageEntity> helper(AccountEntity current_Account, AccountEntity second_Account, SendMessageDTO dto, int page) {
         List<MessageEntity> messageEntityList = new ArrayList<>();
@@ -177,12 +185,15 @@ public class AccountService {
             this.accountRepositories.save(second_Account);
             return second_Account.getMessageEntities();
         }
+        System.out.println(page);
         HistoryEntity history = new HistoryEntity(dto.message,second_Account.getEmail());
         historyLists.add(history);
         MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
         messageEntity.setHistoryEntities(historyLists);
+        messageEntityList.add(messageEntity);
         current_Account.setMessageEntities(messageEntityList);
         this.accountRepositories.save(current_Account);
+        System.out.println(current_Account.getMessageEntities());
         return current_Account.getMessageEntities();
     }
 
