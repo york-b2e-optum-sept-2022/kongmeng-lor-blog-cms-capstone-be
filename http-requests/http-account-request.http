@@ -25,9 +25,9 @@ POST http://localhost:8008/api/account
 Content-Type: application/json
 
 {
-  "email": "6kjkjkll83",
-  "password": "test",
-  "confirm_Password": "test",
+  "email": "3",
+  "password": "l",
+  "confirm_Password": "l",
   "name":"Kong"
 }
 
