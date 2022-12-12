@@ -64,6 +64,8 @@ public class MessageEntity {
         this.current_Message = current_Message;
     }
 
+
+
     public String getEmail_From() {
         return email_From;
     }
