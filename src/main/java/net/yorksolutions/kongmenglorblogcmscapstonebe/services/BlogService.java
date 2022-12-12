@@ -1,11 +1,10 @@
 package net.yorksolutions.kongmenglorblogcmscapstonebe.services;
 
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogCommentDTO;
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDeleteDTO;
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogEditDTO;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.*;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.CommentsEntity;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.AccountRepositories;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.BlogRepositories;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.repositories.CommentRepositories;
 import org.springframework.http.HttpStatus;
@@ -19,11 +18,13 @@ import java.util.Optional;
 
 @Service
 public class BlogService {
+    AccountRepositories accountRepositories;
     BlogRepositories blogRepositories;
 
     CommentRepositories commentRepositories;
 
-    public BlogService(BlogRepositories blogRepositories, CommentRepositories commentRepositories) {
+    public BlogService(AccountRepositories accountRepositories, BlogRepositories blogRepositories, CommentRepositories commentRepositories) {
+        this.accountRepositories = accountRepositories;
         this.blogRepositories = blogRepositories;
         this.commentRepositories = commentRepositories;
     }
@@ -49,8 +50,12 @@ public class BlogService {
 
     public BlogEntity addComment(BlogCommentDTO dto) {
         BlogEntity blogEntity = checkBlogId(dto.Id);
+        Optional<AccountEntity> account = this.accountRepositories.findById(dto.user_Id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
         List<CommentsEntity> commentsLists;
-        CommentsEntity comment = new CommentsEntity(dto.comments,dto.user_Id);
+        CommentsEntity comment = new CommentsEntity(dto.comments,dto.user_Id,account.get().getName(),account.get().getEmail());
         if (blogEntity.getCommentsLists().isEmpty()) {
             commentsLists = new ArrayList<>();
             commentsLists.add(comment);
@@ -68,12 +73,15 @@ public class BlogService {
     public BlogEntity checkBlogId(Long Id) {
         Optional<BlogEntity> blogEntity = this.blogRepositories.findById(Id);
         if (blogEntity.isEmpty()) {
-            System.out.println("HERE");
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         return blogEntity.get();
     }
-
+    public BlogEntity editComment(BlogAddCommentDTO dto) {
+        BlogEntity blog = this.checkBlogId(dto.id);
+        blog.getCommentsLists().get(dto.index).setComment(dto.comment);
+        return this.blogRepositories.save(blog);
+    }
     public BlogEntity deleteComment(BlogDeleteDTO dto) {
         BlogEntity blogEntity = checkBlogId(dto.Id);
         List<CommentsEntity> comments = blogEntity.getCommentsLists();
@@ -91,26 +99,39 @@ public class BlogService {
         throw new ResponseStatusException(HttpStatus.FORBIDDEN);
     }
 
-    public void updateViews(Long blogId,Long userId) {
-        BlogEntity blogEntity = checkBlogId(blogId);
+    public BlogEntity updateViews(UpdateViewsDTO dto) {
+        BlogEntity blogEntity = checkBlogId(dto.blogId);
         List<Long> userViews = blogEntity.getView_Accounts();
         Integer temp = blogEntity.getView_Counts();
         if (userViews.isEmpty()) {
-            userViews.add(userId);
+            userViews.add(dto.userId);
             blogEntity.setView_Accounts(userViews);
             blogEntity.setView_Counts(1);
-            this.blogRepositories.save(blogEntity);
-            return;
+            return this.blogRepositories.save(blogEntity);
         }
         for(int i = 0; i < userViews.size(); i++) {
-            if (userViews.get(i) != userId) {
-                userViews.add(userId);
-                temp+=1;
-                blogEntity.setView_Accounts(userViews);
-                blogEntity.setView_Counts(temp);
-                this.blogRepositories.save(blogEntity);
-                return;
+            if (userViews.get(i) == dto.userId) {
+                return blogEntity;
             }
         }
+        userViews.add(dto.userId);
+        temp+=1;
+        blogEntity.setView_Accounts(userViews);
+        blogEntity.setView_Counts(temp);
+        this.blogRepositories.save(blogEntity);
+        return this.blogRepositories.save(blogEntity);
     }
+    public Iterable<BlogEntity> getAllBlogs() {
+        return this.blogRepositories.findAll();
+    }
+
+//    public List<BlogEntity> getAllBlogsExceptCurrentId(Long id) {
+//        Optional<AccountEntity> account = this.accountRepositories.findById(id);
+//        Iterable<BlogEntity> blogs = this.blogRepositories.findAll();
+//        if (account.isEmpty()) {
+//            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+//        }
+//        blogs.iterator()
+//
+//    }
 }

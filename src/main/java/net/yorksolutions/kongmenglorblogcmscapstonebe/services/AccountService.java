@@ -4,7 +4,6 @@ import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.CreateAccountDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.SendMessageDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.AccountEntity;
-//import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.HistoryEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.MessageEntity;
@@ -110,7 +109,6 @@ public class AccountService {
                 }
             }
         }
-        System.out.println("MessageID: " + message_Id);
 
         if(message_Id == -1) {
             List<MessageEntity> temp = current_Account.getMessageEntities();
@@ -146,7 +144,7 @@ public class AccountService {
         HistoryEntity history = new HistoryEntity(dto.message, current_Account.getEmail());
         historyLists.add(history);
 
-        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(),historyLists);
+        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
         messageEntityList.add(messageEntity);
         List<MessageEntity> temp_Lists = second_Account.getMessageEntities();
         int index = temp_Lists.size();
@@ -207,12 +205,12 @@ public class AccountService {
         this.accountRepositories.save(account.get());
         return account.get().getBlogEntities().get(account.get().getBlogEntities().size()-1);
     }
+
     public List<BlogEntity> deleteBlog(Long Id) {
         Optional<AccountEntity> account = this.accountRepositories.findById(Id);
         if (account.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-
         return account.get().getBlogEntities();
     }
 
@@ -222,5 +220,14 @@ public class AccountService {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
         return account.get().getBlogEntities();
+    }
+
+    public List<MessageEntity> getMessages(Long id) {
+        Optional<AccountEntity> account = this.accountRepositories.findById(id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        List<MessageEntity> messages = account.get().getMessageEntities();
+        return messages;
     }
 }

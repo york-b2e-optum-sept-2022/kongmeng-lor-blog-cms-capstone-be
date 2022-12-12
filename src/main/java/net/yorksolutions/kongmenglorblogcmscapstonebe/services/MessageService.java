@@ -8,7 +8,6 @@ import java.util.*;
 @Service
 public class MessageService {
     MessageRepositories messageRepositories;
-
     public MessageService(MessageRepositories messageRepositories) {
         this.messageRepositories = messageRepositories;
     }

@@ -40,6 +40,7 @@ public class MessageEntity {
         this.email_From = email_From;
         this.email_To = email_To;
         this.historyEntities = historyEntities;
+
         this.owner = email_To;
     }
 

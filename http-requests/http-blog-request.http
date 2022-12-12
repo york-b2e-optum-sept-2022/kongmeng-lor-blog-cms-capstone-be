@@ -1,3 +1,27 @@
+PUT http://localhost:8008/api/blog/edit/comment
+Content-Type: application/json
+
+{
+  "id":4,
+  "index": 0,
+  "comment": "Take care!"
+}
+
+###
+POST http://localhost:8008/api/blog/update/views
+Content-Type: application/json
+
+{
+  "blogId": 2,
+  "userId": 1
+}
+
+###
+GET http://localhost:8008/api/blog/get/allblogs
+Accept: application/json
+
+###
+
 POST http://localhost:8008/api/blog/update/views?blogId=2&userId=2
 Accept: application/json
 
@@ -17,14 +41,14 @@ POST http://localhost:8008/api/blog/add/comment
 Content-Type: application/json
 
 {
-  "Id": 2,
+  "Id": 4,
   "user_Id": 1,
-  "comments": "Not bad!"
+  "comments": "Looks good Man!"
 }
 
 ###
 
-GET http://localhost:8008/api/account/get/allBlogs?Id=1
+GET http://localhost:8008/api/account/get/allblogsbyid?Id=1
 Accept: application/json
 
 ###
@@ -51,7 +75,7 @@ POST http://localhost:8008/api/account/post/blog
 Content-Type: application/json
 
 {
-  "title": "Hello world!",
+  "title": "Hello!",
   "body": "Waking up everyday, it's great.",
   "create_Date": "12-18-2022",
   "update_Date": "12-18-2022",

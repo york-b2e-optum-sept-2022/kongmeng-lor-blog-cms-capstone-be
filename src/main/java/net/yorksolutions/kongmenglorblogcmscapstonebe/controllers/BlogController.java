@@ -1,12 +1,11 @@
 package net.yorksolutions.kongmenglorblogcmscapstonebe.controllers;
 
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogCommentDTO;
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDeleteDTO;
-import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogEditDTO;
+import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.*;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.entities.BlogEntity;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.services.BlogService;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @CrossOrigin
@@ -30,7 +29,15 @@ public class BlogController {
         return this.blogService.deleteComment(dto);
     }
     @PostMapping("/update/views")
-    public void updateViews(@RequestParam Long blogId, @RequestParam Long userId) {
-        this.blogService.updateViews(blogId,userId);
+    public BlogEntity updateViews(@RequestBody UpdateViewsDTO dto) {
+        return this.blogService.updateViews(dto);
+    }
+    @GetMapping("/get/allblogs")
+    public Iterable<BlogEntity> getAllBlogs() {
+        return this.blogService.getAllBlogs();
+    }
+    @PutMapping("/edit/comment")
+    public BlogEntity editComment(@RequestBody BlogAddCommentDTO dto) {
+        return this.blogService.editComment(dto);
     }
 }
