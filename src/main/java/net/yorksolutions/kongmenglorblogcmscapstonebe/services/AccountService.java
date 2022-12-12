@@ -191,7 +191,7 @@ public class AccountService {
         if (account.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND);
         }
-        BlogEntity blogEntity = new BlogEntity(dto.title,dto.body,dto.create_Date,dto.update_Date,dto.owner_Email,dto.owner_Id);
+        BlogEntity blogEntity = new BlogEntity(dto.title,dto.body,dto.owner_Email,dto.owner_Id);
         List<BlogEntity> blogEntities = new ArrayList<>();
         if (account.get().getBlogEntities().isEmpty()) {
             blogEntities.add(blogEntity);
@@ -229,5 +229,13 @@ public class AccountService {
         }
         List<MessageEntity> messages = account.get().getMessageEntities();
         return messages;
+    }
+
+    public List<BlogEntity> getBlogsById(Long id) {
+        Optional<AccountEntity> account = this.accountRepositories.findById(id);
+        if (account.isEmpty()) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND);
+        }
+        return account.get().getBlogEntities();
     }
 }

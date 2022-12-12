@@ -60,8 +60,7 @@ Content-Type: application/json
 {
   "Id": 2,
   "title": "HELLO YOU!",
-  "body": "Loving is hard.",
-  "update_Date": "12-09-2022"
+  "body": "Loving is hard."
 }
 
 ###
@@ -77,8 +76,6 @@ Content-Type: application/json
 {
   "title": "Hello!",
   "body": "Waking up everyday, it's great.",
-  "create_Date": "12-18-2022",
-  "update_Date": "12-18-2022",
   "owner_Email": "test1",
   "owner_Id": 1
 }

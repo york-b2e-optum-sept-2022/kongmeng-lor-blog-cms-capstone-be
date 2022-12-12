@@ -41,8 +41,6 @@ public class AccountController {
     public MessageEntity createMessage(@RequestBody SendMessageDTO dto) {
         return this.accountService.createMessage(dto);
     }
-
-
     @PostMapping("/post/blog")
     public BlogEntity postBlog(@RequestBody BlogDTO dto) {
         return this.accountService.postBlog(dto);
@@ -60,5 +58,9 @@ public class AccountController {
     @GetMapping("/get/messagesById")
     public List<MessageEntity> getMessages(@RequestParam Long id) {
         return this.accountService.getMessages(id);
+    }
+    @GetMapping("/get/blogsById")
+    public List<BlogEntity> getBlogsById(@RequestParam Long id) {
+        return this.accountService.getBlogsById(id);
     }
 }

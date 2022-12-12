@@ -3,7 +3,9 @@ package net.yorksolutions.kongmenglorblogcmscapstonebe.entities;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,9 +19,9 @@ public class BlogEntity {
     @JsonProperty
     private String body;
     @JsonProperty
-    private String create_Date;
+    private LocalDate create_Date;
     @JsonProperty
-    private String update_Date;
+    private LocalDate update_Date;
     @JsonProperty
     private String owner_Email;
     @JsonProperty
@@ -53,11 +55,11 @@ public class BlogEntity {
 
     public BlogEntity() {}
 
-    public BlogEntity(String title, String body, String create_Date, String update_Date, String owner_Email, Long owner_Id) {
+    public BlogEntity(String title, String body, String owner_Email, Long owner_Id) {
         this.title = title;
         this.body = body;
-        this.create_Date = create_Date;
-        this.update_Date = update_Date;
+        this.create_Date = LocalDate.now();
+        this.update_Date = LocalDate.now();
         this.owner_Email = owner_Email;
         this.owner_Id = owner_Id;
     }
@@ -90,19 +92,19 @@ public class BlogEntity {
         this.body = body;
     }
 
-    public String getCreate_Date() {
+    public LocalDate getCreate_Date() {
         return create_Date;
     }
 
-    public void setCreate_Date(String create_Date) {
+    public void setCreate_Date(LocalDate create_Date) {
         this.create_Date = create_Date;
     }
 
-    public String getUpdate_Date() {
+    public LocalDate getUpdate_Date() {
         return update_Date;
     }
 
-    public void setUpdate_Date(String update_Date) {
+    public void setUpdate_Date(LocalDate update_Date) {
         this.update_Date = update_Date;
     }
 

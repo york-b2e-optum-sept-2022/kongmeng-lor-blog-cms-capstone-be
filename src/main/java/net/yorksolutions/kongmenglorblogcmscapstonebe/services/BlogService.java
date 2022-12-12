@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,9 +42,7 @@ public class BlogService {
         if (!dto.body.isEmpty()) {
             blogEntity.setBody(dto.body);
         }
-        if (!dto.update_Date.isEmpty()) {
-            blogEntity.setUpdate_Date(dto.update_Date);
-        }
+        blogEntity.setUpdate_Date(LocalDate.now());
         this.blogRepositories.save(blogEntity);
         return blogEntity;
     }
