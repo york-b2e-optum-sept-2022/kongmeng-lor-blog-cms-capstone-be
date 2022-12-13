@@ -76,7 +76,7 @@ Content-Type: application/json
 {
   "title": "Test5!",
   "body": "Waking up everyday, it's great.",
-  "owner_Email": "test1",
+  "owner_Email": "test",
   "owner_Id": 1
 }
 

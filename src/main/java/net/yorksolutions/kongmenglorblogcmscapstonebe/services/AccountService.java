@@ -1,5 +1,4 @@
 package net.yorksolutions.kongmenglorblogcmscapstonebe.services;
-
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.BlogDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.CreateAccountDTO;
 import net.yorksolutions.kongmenglorblogcmscapstonebe.dto.SendMessageDTO;
@@ -19,12 +18,10 @@ import java.util.*;
 public class AccountService {
     AccountRepositories accountRepositories;
     MessageRepositories messageRepositories;
-
     public AccountService(AccountRepositories accountRepositories, MessageRepositories messageRepositories) {
         this.accountRepositories = accountRepositories;
         this.messageRepositories = messageRepositories;
     }
-
     public AccountEntity create(CreateAccountDTO dto) {
         if (dto.email.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.CONFLICT);
@@ -98,7 +95,6 @@ public class AccountService {
             return this.helper2(current_Account,this.helper(current_Account,second_Account,dto,page));
         }
         if (!current_Account.getMessageCreated() && second_Account.getMessageCreated()) {
-
             return this.helper2(second_Account,this.helper(current_Account,second_Account,dto,page));
         }
 
@@ -224,7 +220,6 @@ public class AccountService {
         }
         return account.get().getBlogEntities();
     }
-
     public List<BlogEntity> getBlogs(Long Id) {
         Optional<AccountEntity> account = this.accountRepositories.findById(Id);
         if (account.isEmpty()) {
@@ -232,7 +227,6 @@ public class AccountService {
         }
         return account.get().getBlogEntities();
     }
-
     public List<MessageEntity> getMessages(Long id) {
         Optional<AccountEntity> account = this.accountRepositories.findById(id);
         if (account.isEmpty()) {
