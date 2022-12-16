@@ -30,8 +30,8 @@ DELETE http://localhost:8008/api/blog/delete/comment
 Content-Type: application/json
 
 {
-  "Id": 2,
-  "index": 0,
+  "Id": 4,
+  "index": 1,
   "user_Id": 1
 }
 
@@ -41,9 +41,9 @@ POST http://localhost:8008/api/blog/add/comment
 Content-Type: application/json
 
 {
-  "Id": 4,
-  "user_Id": 1,
-  "comments": "Looks good Man!"
+  "Id": 10,
+  "user_Id": 3,
+  "comments": "test"
 }
 
 ###

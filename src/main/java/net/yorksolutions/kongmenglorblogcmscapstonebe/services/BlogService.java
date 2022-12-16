@@ -84,7 +84,9 @@ public class BlogService {
         BlogEntity blogEntity = checkBlogId(dto.Id);
         List<CommentsEntity> comments = blogEntity.getCommentsLists();
         List<CommentsEntity> new_Comments = new ArrayList<>();
-        if (comments.get(dto.index).getSender().equals(dto.user_Id)) {
+        System.out.println("USERID: " + dto.user_Id);
+        System.out.println("COMMENT SENDER: " + comments.get(dto.index).getSender());
+        if (comments.get(dto.index).getSender() == (dto.user_Id)) {
             for (int i = 0; i < comments.size(); i++) {
                 if (comments.get(i) != comments.get(dto.index)) {
                     new_Comments.add(comments.get(i));

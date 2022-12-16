@@ -70,6 +70,7 @@ public class AccountService {
         AccountEntity current_Account = account.get();
         AccountEntity second_Account = account2.get();
 
+
         List<MessageEntity> messageLists = new ArrayList<>();
         List<HistoryEntity> historyLists = new ArrayList<>();
 
@@ -86,8 +87,6 @@ public class AccountService {
 
             this.accountRepositories.save(current_Account);
             this.accountRepositories.save(second_Account);
-
-
             return current_Account.getMessageEntities().get(0);
         }
         if (current_Account.getMessageCreated() && !second_Account.getMessageCreated()) {
@@ -126,6 +125,8 @@ public class AccountService {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
         message.get().setCurrent_Message(messages);
+        System.out.println(current_Account.getEmail());
+        System.out.println(second_Account.getEmail());
         message.get().setEmail_From(current_Account.getEmail());
         message.get().setEmail_To(second_Account.getEmail());
         List<HistoryEntity> historyEntityList = message.get().getHistoryEntities();
