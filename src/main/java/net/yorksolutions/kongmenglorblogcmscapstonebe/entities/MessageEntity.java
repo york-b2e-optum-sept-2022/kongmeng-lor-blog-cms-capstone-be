@@ -40,9 +40,9 @@ public class MessageEntity {
         this.email_From = email_From;
         this.email_To = email_To;
         this.historyEntities = historyEntities;
-
         this.owner = email_To;
     }
+
 
     public String getOwner() {
         return owner;
@@ -80,11 +80,4 @@ public class MessageEntity {
         this.email_To = email_To;
     }
 
-//    public List<HashMap> getHistory_Messages() {
-//        return history_Messages;
-//    }
-//
-//    public void setHistory_Messages(List<HashMap> history_Messages) {
-//        this.history_Messages = history_Messages;
-//    }
 }
