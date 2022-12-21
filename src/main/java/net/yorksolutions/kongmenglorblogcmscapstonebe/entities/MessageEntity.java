@@ -15,15 +15,42 @@ public class MessageEntity {
     @JsonProperty
     private String current_Message;
     @JsonProperty
-    private String owner;
-    @JsonProperty
     private String email_From;
     @JsonProperty
     private String email_To;
+    @JsonProperty
+    private String owner_To_Name;
+    @JsonProperty
+    private String owner_From_Name;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn
     List<HistoryEntity> historyEntities = new ArrayList<>();
+
+    public MessageEntity(String current_Message, String email_From, String email_To, String owner_To_Name, String owner_From_Name, List<HistoryEntity> historyEntities) {
+        this.current_Message = current_Message;
+        this.email_From = email_From;
+        this.email_To = email_To;
+        this.owner_To_Name = owner_To_Name;
+        this.owner_From_Name = owner_From_Name;
+        this.historyEntities = historyEntities;
+    }
+
+    public String getOwner_To_Name() {
+        return owner_To_Name;
+    }
+
+    public void setOwner_To_Name(String owner_To_Name) {
+        this.owner_To_Name = owner_To_Name;
+    }
+
+    public String getOwner_From_Name() {
+        return owner_From_Name;
+    }
+
+    public void setOwner_From_Name(String owner_From_Name) {
+        this.owner_From_Name = owner_From_Name;
+    }
 
     public List<HistoryEntity> getHistoryEntities() {
         return historyEntities;
@@ -34,23 +61,6 @@ public class MessageEntity {
     }
 
     public MessageEntity() {}
-
-    public MessageEntity(String current_Message, String email_From, String email_To, List<HistoryEntity> historyEntities) {
-        this.current_Message = current_Message;
-        this.email_From = email_From;
-        this.email_To = email_To;
-        this.historyEntities = historyEntities;
-        this.owner = email_To;
-    }
-
-
-    public String getOwner() {
-        return owner;
-    }
-
-    public void setOwner(String owner) {
-        this.owner = owner;
-    }
 
     public Long getId() {
         return id;

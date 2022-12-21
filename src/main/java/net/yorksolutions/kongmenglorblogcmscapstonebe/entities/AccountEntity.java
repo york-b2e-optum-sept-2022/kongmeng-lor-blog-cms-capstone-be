@@ -14,6 +14,7 @@ public class AccountEntity {
     private Long id;
 
     @JsonProperty
+    @Column(unique = true)
     private String email;
     @JsonIgnore
     private String password;

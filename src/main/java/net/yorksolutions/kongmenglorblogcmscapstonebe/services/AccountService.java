@@ -78,7 +78,7 @@ public class AccountService {
         if (!current_Account.getMessageCreated()&& !second_Account.getMessageCreated()) {
             HistoryEntity history = new HistoryEntity(dto.message,current_Account.getEmail());
             historyLists.add(history);
-            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(),current_Account.getName(),second_Account.getName(), historyLists);
             messageLists.add(messageEntity);
 
 
@@ -142,7 +142,7 @@ public class AccountService {
         HistoryEntity history = new HistoryEntity(dto.message, current_Account.getEmail());
         historyLists.add(history);
 
-        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), current_Account.getName(), second_Account.getName(), historyLists);
         messageEntityList.add(messageEntity);
         List<MessageEntity> temp_Lists = second_Account.getMessageEntities();
         int index = temp_Lists.size();
@@ -176,7 +176,7 @@ public class AccountService {
         if (page == 1) {
             HistoryEntity history = new HistoryEntity(dto.message,current_Account.getEmail());
             historyLists.add(history);
-            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+            MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), current_Account.getName(), second_Account.getName(), historyLists);
             messageEntityList.add(messageEntity);
             second_Account.setMessageEntities(messageEntityList);
             this.accountRepositories.save(second_Account);
@@ -185,7 +185,7 @@ public class AccountService {
         System.out.println(page);
         HistoryEntity history = new HistoryEntity(dto.message,second_Account.getEmail());
         historyLists.add(history);
-        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), historyLists);
+        MessageEntity messageEntity = new MessageEntity(dto.message,current_Account.getEmail(),second_Account.getEmail(), current_Account.getName(), second_Account.getName(), historyLists);
         messageEntity.setHistoryEntities(historyLists);
         messageEntityList.add(messageEntity);
         current_Account.setMessageEntities(messageEntityList);

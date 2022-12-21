@@ -8,11 +8,11 @@ networks:
           gateway: 172.80.0.1
 
 services:
-
   frontend:
     image: frontend
     ports:
       - 3000:80
+
   backend:
     container_name: backend
     image: backend
